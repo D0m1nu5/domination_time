@@ -1,0 +1,29 @@
+yaml
+name: Build Domination Time
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+      - name: Install dependencies
+        run: flutter pub get
+      - name: Build APK
+        run: flutter build apk --release
+      - name: Build Windows
+        run: flutter build windows --release
+      - name: Upload APK
+        uses: actions/upload-artifact@v2
+        with:
+          name: domination-time-apk
+          path: build/app/outputs/flutter-apk/app-release.apk
+      - name: Upload Windows
+        uses: actions/upload-artifact@v2
+        with:
+          name: domination-time-windows
+          path: build/windows/runner/Release/
